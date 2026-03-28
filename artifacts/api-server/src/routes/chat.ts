@@ -44,13 +44,22 @@ async function getAIReply(persona: string, message: string, conversationHistory:
     });
 
     if (!response.ok) {
+      const errData = await response.json().catch(() => ({})) as { error?: { type?: string; message?: string } };
+      const errType = errData?.error?.type ?? "";
+      if (errType === "insufficient_quota") {
+        return `⚠️ تنبيه: مفتاح OpenAI API المستخدم قد استنفد حصته. يرجى تحديث المفتاح من إعدادات Replit.\n\nبصفتي ${persona}، يمكنني الإشارة أن سؤالك عن "${message}" يتعلق بمجال قانوني مهم. للحصول على إجابة دقيقة، يرجى استشارة محامٍ متخصص.`;
+      }
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json() as { choices: { message: { content: string } }[] };
     return data.choices[0]?.message?.content ?? "عذراً، لم أتمكن من معالجة طلبك.";
-  } catch {
-    return `شكراً على سؤالك. بصفتي ${persona}، يمكنني إخبارك أن هذا سؤال قانوني مهم. للحصول على إجابة دقيقة، يرجى استشارة محامٍ متخصص.`;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes("insufficient_quota") || msg.includes("quota")) {
+      return `⚠️ مفتاح OpenAI API استنفد حصته. يرجى تحديث المفتاح.\n\nبصفتي ${persona}، أشير أن سؤالك يتعلق بمجال قانوني مهم يستحق استشارة متخصص.`;
+    }
+    return `شكراً على سؤالك. بصفتي ${persona}، يمكنني إخبارك أن هذا سؤال قانوني مهم يتعلق بـ: "${message}". للحصول على إجابة دقيقة، يرجى استشارة محامٍ متخصص. تذكر دائماً أن كل قضية لها ظروفها الخاصة.`;
   }
 }
 
