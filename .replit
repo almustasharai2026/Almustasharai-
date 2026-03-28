@@ -24,3 +24,10 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[userenv]
+
+[userenv.shared]
+JWT_SECRET = "new_secure_jwt_secret_2026"
+ADMIN_EMAIL = "bishoysamy390@gmail.com"
+ADMIN_PASSWORD = "Bishosamy2020"

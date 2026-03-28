@@ -1,0 +1,21 @@
+packages:
+  "framer-motion": "Smooth page transitions and chat animations"
+  "lucide-react": "Beautiful consistent icons"
+  "react-webcam": "Camera capture for sending document photos"
+  "date-fns": "Date formatting for the admin dashboard"
+  "jspdf": "Exporting legal forms as PDF documents"
+  "docx": "Exporting legal forms as Word documents"
+  "file-saver": "Saving generated Word documents locally"
+
+images:
+  - path: "artifacts/legal-ai/public/images/auth-bg.png"
+    description: "A dark, moody, highly professional cinematic photography of a judge's wooden gavel resting on old law books in a dimly lit, luxurious legal library. Soft warm golden light leaking in. Very high quality, 8k."
+    aspect_ratio: "16:9"
+  - path: "artifacts/legal-ai/public/images/logo.png"
+    description: "Minimalist modern geometric luxury logo of a justice scale in gold and deep blue colors, isolated on a completely transparent background."
+    aspect_ratio: "1:1"
+
+notes:
+  - The application is purely RTL (Right-to-Left) and fully in Arabic.
+  - Using JWT authentication stored in localStorage.
+  - Integrating Web Speech API for voice-to-text.
