@@ -17,50 +17,88 @@ const PERSONAS: Record<string, string> = {
 };
 
 async function getAIReply(persona: string, message: string, conversationHistory: { role: string; content: string }[]): Promise<string> {
+  const GEMINI_KEY = process.env["GEMINI_API_KEY"];
   const OPENAI_KEY = process.env["OPENAI_API_KEY"];
   const systemPrompt = PERSONAS[persona] ?? "أنت مساعد قانوني متخصص في القانون المصري.";
 
-  if (!OPENAI_KEY) {
-    return `شكراً على سؤالك. بصفتي ${persona}، يمكنني إخبارك أن هذا سؤال قانوني مهم يتعلق بـ: "${message}". للحصول على إجابة دقيقة، يرجى استشارة محامٍ متخصص. تذكر دائماً أن كل قضية لها ظروفها الخاصة.`;
-  }
+  // Try Gemini first
+  if (GEMINI_KEY) {
+    try {
+      const geminiHistory = conversationHistory.slice(-10).map(m => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [{ text: m.content }],
+      }));
 
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...conversationHistory.slice(-10),
-          { role: "user", content: message },
+      const body = {
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [
+          ...geminiHistory,
+          { role: "user", parts: [{ text: message }] },
         ],
-        max_tokens: 1000,
-        temperature: 0.7,
-      }),
-    });
+        generationConfig: { maxOutputTokens: 1024, temperature: 0.7 },
+      };
 
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({})) as { error?: { type?: string; message?: string } };
-      const errType = errData?.error?.type ?? "";
-      if (errType === "insufficient_quota") {
-        return `⚠️ تنبيه: مفتاح OpenAI API المستخدم قد استنفد حصته. يرجى تحديث المفتاح من إعدادات Replit.\n\nبصفتي ${persona}، يمكنني الإشارة أن سؤالك عن "${message}" يتعلق بمجال قانوني مهم. للحصول على إجابة دقيقة، يرجى استشارة محامٍ متخصص.`;
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({})) as { error?: { message?: string; code?: number } };
+        throw new Error(`Gemini API error ${response.status}: ${errData?.error?.message ?? "unknown"}`);
       }
-      throw new Error(`OpenAI API error: ${response.status}`);
-    }
 
-    const data = await response.json() as { choices: { message: { content: string } }[] };
-    return data.choices[0]?.message?.content ?? "عذراً، لم أتمكن من معالجة طلبك.";
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    if (msg.includes("insufficient_quota") || msg.includes("quota")) {
-      return `⚠️ مفتاح OpenAI API استنفد حصته. يرجى تحديث المفتاح.\n\nبصفتي ${persona}، أشير أن سؤالك يتعلق بمجال قانوني مهم يستحق استشارة متخصص.`;
+      const data = await response.json() as {
+        candidates?: { content?: { parts?: { text?: string }[] } }[];
+        error?: { message?: string };
+      };
+
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) return text;
+      throw new Error("لا يوجد رد من Gemini");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error("[Gemini Error]", msg);
+      // Fall through to OpenAI if available
     }
-    return `شكراً على سؤالك. بصفتي ${persona}، يمكنني إخبارك أن هذا سؤال قانوني مهم يتعلق بـ: "${message}". للحصول على إجابة دقيقة، يرجى استشارة محامٍ متخصص. تذكر دائماً أن كل قضية لها ظروفها الخاصة.`;
   }
+
+  // Try OpenAI as fallback
+  if (OPENAI_KEY) {
+    try {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENAI_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...conversationHistory.slice(-10),
+            { role: "user", content: message },
+          ],
+          max_tokens: 1000,
+          temperature: 0.7,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json() as { choices: { message: { content: string } }[] };
+        return data.choices[0]?.message?.content ?? "عذراً، لم أتمكن من معالجة طلبك.";
+      }
+    } catch (err) {
+      console.error("[OpenAI Error]", err);
+    }
+  }
+
+  // Static fallback when no API key is working
+  return `شكراً على سؤالك. بصفتي ${persona}، يمكنني إخبارك أن هذا سؤال قانوني مهم يتعلق بـ: "${message}". ⚠️ تعذر الاتصال بخدمة الذكاء الاصطناعي حالياً. يرجى التحقق من صلاحية مفتاح GEMINI_API_KEY.`;
 }
 
 router.post("/chat", requireAuth, async (req: AuthRequest, res) => {
