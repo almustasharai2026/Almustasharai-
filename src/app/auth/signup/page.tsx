@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Scale, ShieldCheck, Gift, Sparkles } from "lucide-react";
+import { Scale, Gift, Sparkles, Globe, Facebook } from "lucide-react";
 import { useState } from "react";
 import { useAuth, useFirestore } from "@/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -35,33 +35,21 @@ export default function SignupPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
       await updateProfile(user, { displayName: fullName });
-
-      // Create user profile with 50 EGP Welcome Bonus
       await setDoc(doc(db, "users", user.uid), {
         id: user.uid,
-        email: email,
-        fullName: fullName,
-        balance: 50, // WELCOME BONUS
+        email,
+        fullName,
+        balance: 50,
         languagePreference: "ar",
         dateJoined: new Date().toISOString(),
         status: "active",
         createdAt: new Date().toISOString()
       });
-
-      toast({
-        title: "تم إنشاء الحساب بنجاح!",
-        description: "لقد حصلت على ٥٠ جنيه رصيد ترحيبي مجاناً في محفظتك.",
-      });
+      toast({ title: "مبروك!", description: "تم إنشاء الحساب وحصلت على ٥٠ جنيه رصيد ترحيبي." });
       router.push("/dashboard");
     } catch (error: any) {
-      console.error(error);
-      toast({
-        variant: "destructive",
-        title: "خطأ في التسجيل",
-        description: error.message || "حدث خطأ أثناء إنشاء الحساب.",
-      });
+      toast({ variant: "destructive", title: "خطأ", description: error.message });
     } finally {
       setIsLoading(false);
     }
@@ -69,78 +57,77 @@ export default function SignupPage() {
 
   return (
     <div className="container flex items-center justify-center min-h-[calc(100vh-10rem)] py-12 px-4">
-      <Card className="w-full max-w-md glass-cosmic border-none rounded-[2.5rem] shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 via-primary to-cyan-500" />
+      <Card className="w-full max-w-md glass-cosmic border-none rounded-[3rem] shadow-2xl relative overflow-hidden">
         <CardHeader className="space-y-4 text-center pt-12">
           <div className="flex justify-center">
-            <div className="h-20 w-20 bg-primary/10 rounded-3xl flex items-center justify-center shadow-inner border border-white/5 animate-pulse">
-              <Scale className="h-10 w-10 text-primary" />
+            <div className="h-16 w-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+              <Scale className="h-8 w-8 text-white" />
             </div>
           </div>
           <div>
-            <CardTitle className="text-3xl font-black text-white">انضم لكوكب المستشار</CardTitle>
-            <CardDescription className="text-lg opacity-60">ابدأ رحلتك القانونية الذكية الآن.</CardDescription>
+            <CardTitle className="text-3xl font-black text-white">انضم للكوكب</CardTitle>
+            <CardDescription className="text-white/40">ابدأ رحلتك القانونية الأكثر راحة.</CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="space-y-6 text-right pb-10">
-          <div className="bg-primary/10 border border-primary/20 p-5 rounded-[1.5rem] flex items-center gap-4 animate-in zoom-in duration-700">
-             <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
-               <Gift className="h-6 w-6 text-primary" />
+        <CardContent className="space-y-6 text-right px-8 pb-10">
+          
+          <div className="bg-white/5 border border-white/10 p-4 rounded-3xl flex items-center gap-4 animate-in zoom-in">
+             <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center">
+               <Gift className="h-5 w-5 text-white" />
              </div>
-             <div>
-               <p className="text-sm text-primary font-black leading-tight">هدية ترحيبية!</p>
-               <p className="text-[11px] opacity-70">سجل الآن واحصل على ٥٠ جنيه رصيد مجاني فوراً.</p>
-             </div>
+             <p className="text-[10px] text-white/60 font-bold leading-tight">هدية ٥٠ جنيه رصيد مجاني فور التسجيل!</p>
           </div>
 
-          <div className="space-y-2 mt-4">
-            <Label htmlFor="full-name" className="text-sm font-bold opacity-70">الاسم الكامل</Label>
+          <div className="grid grid-cols-2 gap-4">
+            <Button variant="outline" className="h-12 rounded-2xl glass border-white/10 hover:bg-white/5 flex gap-2">
+              <Globe className="h-4 w-4" /> Google
+            </Button>
+            <Button variant="outline" className="h-12 rounded-2xl glass border-white/10 hover:bg-white/5 flex gap-2">
+              <Facebook className="h-4 w-4" /> Facebook
+            </Button>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-white/40 text-xs px-2">الاسم الكامل</Label>
             <Input 
-              id="full-name" 
               placeholder="مثال: بيشوي سامي" 
-              className="glass border-white/5 h-14 rounded-2xl text-lg pr-4 focus:ring-primary/50"
+              className="glass border-white/[0.05] h-14 rounded-2xl text-lg text-right"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-sm font-bold opacity-70">البريد الإلكتروني</Label>
+            <Label className="text-white/40 text-xs px-2">البريد الإلكتروني</Label>
             <Input 
-              id="email" 
               type="email" 
               placeholder="name@example.com" 
-              className="glass border-white/5 h-14 rounded-2xl text-lg pr-4 focus:ring-primary/50"
+              className="glass border-white/[0.05] h-14 rounded-2xl text-lg text-right"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-sm font-bold opacity-70">كلمة المرور</Label>
+            <Label className="text-white/40 text-xs px-2">كلمة المرور</Label>
             <Input 
-              id="password" 
               type="password" 
-              className="glass border-white/5 h-14 rounded-2xl text-lg pr-4 focus:ring-primary/50"
+              className="glass border-white/[0.05] h-14 rounded-2xl text-lg text-right"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           
           <Button 
-            className="w-full cosmic-gradient h-16 rounded-2xl text-xl font-black mt-4 shadow-2xl shadow-primary/20 group overflow-hidden relative"
+            className="w-full btn-primary h-16 rounded-2xl text-xl font-black shadow-2xl mt-2"
             onClick={handleSignup}
             disabled={isLoading}
           >
-            <span className="relative z-10 flex items-center gap-2">
-              {isLoading ? "جاري المعالجة..." : "انطلق الآن"}
-              {!isLoading && <Sparkles className="h-5 w-5 group-hover:rotate-12 transition-transform" />}
-            </span>
-            <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            {isLoading ? "جاري التحليق..." : "انطلق الآن"}
           </Button>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-6 border-t border-white/5 pt-8 bg-slate-900/40">
-          <div className="text-sm text-center text-muted-foreground">
+        <CardFooter className="flex flex-col space-y-6 border-t border-white/5 pt-8 pb-10">
+          <div className="text-sm text-center text-white/30">
             لديك حساب بالفعل؟{" "}
-            <Link href="/auth/login" className="text-primary font-bold hover:underline">سجل دخولك من هنا</Link>
+            <Link href="/auth/login" className="text-white font-bold hover:underline">سجل دخولك</Link>
           </div>
         </CardFooter>
       </Card>
