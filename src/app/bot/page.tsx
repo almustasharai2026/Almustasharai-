@@ -21,7 +21,8 @@ import {
   Image as ImageIcon,
   ChevronRight,
   AlertCircle,
-  XCircle
+  XCircle,
+  Clock
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { processLegalQuery } from "@/ai/flows/legal-chat-flow";
@@ -35,7 +36,6 @@ import {
   doc, 
   updateDoc, 
   increment,
-  setDoc,
   deleteDoc
 } from "firebase/firestore";
 import { useMemoFirebase } from "@/firebase/provider";
@@ -51,11 +51,11 @@ type Message = {
 };
 
 const CHARACTERS = [
-  { id: "ai-standard", name: "مستشارك الذكي", icon: "🤖", color: "from-primary/30 to-primary/5", desc: "إجابات سريعة وذكية لكافة التساؤلات", cost: 1 },
-  { id: "lawyer", name: "المحامي الفائق", icon: "⚖️", color: "from-blue-600/30 to-indigo-600/10", desc: "خبير القضايا والنزاعات المعقدة", cost: 5 },
-  { id: "judge", name: "خبير القضاء", icon: "👨‍⚖️", color: "from-slate-600/30 to-slate-900/10", desc: "رؤية ثاقبة من منصة الحكم", cost: 5 },
-  { id: "consultant", name: "مستشار استراتيجي", icon: "🏢", color: "from-emerald-600/30 to-teal-600/10", desc: "نمو الشركات والصفقات التجارية", cost: 5 },
-  { id: "notary", name: "الكاتب العدل", icon: "✒️", color: "from-amber-600/30 to-orange-600/10", desc: "صحة وتوثيق المستندات", cost: 1 },
+  { id: "ai-standard", name: "مستشارك الذكي", icon: "🤖", cost: 1, desc: "إجابات سريعة وذكية لكافة التساؤلات" },
+  { id: "notary", name: "الكاتب العدل", icon: "✒️", cost: 1, desc: "صحة وتوثيق المستندات" },
+  { id: "lawyer", name: "المحامي الفائق", icon: "⚖️", cost: 5, desc: "خبير القضايا والنزاعات المعقدة" },
+  { id: "judge", name: "خبير القضاء", icon: "👨‍⚖️", cost: 5, desc: "رؤية ثاقبة من منصة الحكم" },
+  { id: "consultant", name: "مستشار استراتيجي", icon: "🏢", cost: 5, desc: "نمو الشركات والصفقات التجارية" },
 ];
 
 const DISCLAIMER_TEXT = "\n\n--- \n⚠️ إخلاء مسؤولية: هذا الرد نتاج تحليل ذكاء اصطناعي لأغراض استرشادية فقط.";
@@ -182,7 +182,7 @@ export default function BotPage() {
   return (
     <div className="flex h-[calc(100vh-5rem)] w-full overflow-hidden bg-slate-950/20" dir="rtl">
       
-      {/* Sidebar - ChatGPT Style */}
+      {/* Sidebar - Zen Style */}
       <aside className="w-80 glass border-l border-white/5 flex flex-col p-6 gap-8 hidden lg:flex">
         <div className="flex flex-col gap-6">
            <Button onClick={startNewSession} className="w-full h-14 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 justify-start px-6 gap-4 font-black">
@@ -241,8 +241,8 @@ export default function BotPage() {
              <div>
                 <h1 className="text-lg font-black text-white">{activeChar.name}</h1>
                 <p className="text-[10px] text-primary font-black uppercase tracking-widest flex items-center gap-2">
-                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                   تكلفة الرسالة: {activeChar.cost} EGP
+                   <Clock className="h-3 w-3" />
+                   تكلفة الرد: {activeChar.cost} EGP
                 </p>
              </div>
           </div>
@@ -269,6 +269,11 @@ export default function BotPage() {
               <div className="py-20 text-center space-y-6 opacity-20">
                  <Scale className="h-20 w-20 mx-auto" />
                  <p className="text-2xl font-black">اطرح استفسارك القانوني لنبدأ التحليل</p>
+                 <div className="flex flex-wrap gap-4 justify-center">
+                    <Button variant="outline" className="rounded-2xl" onClick={() => setInput("ما هي خطوات تأسيس شركة في مصر؟")}>خطوات التأسيس</Button>
+                    <Button variant="outline" className="rounded-2xl" onClick={() => setInput("صيغة عقد إيجار سكني")}>عقد إيجار</Button>
+                    <Button variant="outline" className="rounded-2xl" onClick={() => setInput("كيفية تقديم بلاغ إلكتروني")}>بلاغ إلكتروني</Button>
+                 </div>
               </div>
             )}
             {messages?.map((msg) => (
@@ -322,11 +327,11 @@ export default function BotPage() {
           <div className="max-w-4xl mx-auto flex gap-4 items-end">
             <div className="flex-grow relative">
               <Input 
-                placeholder={`اكتب سؤالك هنا...`} 
+                placeholder={`اطرح سؤالك على ${activeChar.name}...`} 
                 className="pr-6 pl-16 text-right glass border-white/[0.03] rounded-2xl h-14 text-lg focus-visible:ring-1 ring-primary/40"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               />
               <Button 
                 onClick={handleSend} 
@@ -356,3 +361,4 @@ function SidebarAction({ icon, label, onClick }: any) {
     </div>
   );
 }
+

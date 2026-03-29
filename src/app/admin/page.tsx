@@ -33,7 +33,9 @@ import {
   Wallet,
   Settings2,
   Gavel,
-  XCircle
+  XCircle,
+  TrendingUp,
+  MessageSquare
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

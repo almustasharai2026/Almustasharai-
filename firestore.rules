@@ -65,7 +65,7 @@ service cloud.firestore {
     
     match /paymentRequests/{requestId} {
       allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
-      allow list: if isAdmin() || (isSignedIn() && request.query.limit <= 20); 
+      allow list: if isAdmin() || (isSignedIn() && request.query.limit <= 50); 
       allow create: if isSignedIn();
       allow update: if isAdmin();
       allow delete: if isAdmin();

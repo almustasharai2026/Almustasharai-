@@ -36,6 +36,8 @@ export default function SignupPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: fullName });
+      
+      // Grant 50 EGP Welcome Bonus
       await setDoc(doc(db, "users", user.uid), {
         id: user.uid,
         email,
@@ -46,6 +48,7 @@ export default function SignupPage() {
         status: "active",
         createdAt: new Date().toISOString()
       });
+      
       toast({ title: "مبروك!", description: "تم إنشاء الحساب وحصلت على ٥٠ جنيه رصيد ترحيبي." });
       router.push("/dashboard");
     } catch (error: any) {

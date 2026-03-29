@@ -70,7 +70,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* The Three Power Pillars - Redesigned Buttons */}
+        {/* The Three Power Pillars */}
         <div className="grid md:grid-cols-3 gap-8 mt-24 max-w-6xl mx-auto">
           <PillarButton 
             href="/consultants"
