@@ -30,6 +30,16 @@ service cloud.firestore {
       allow create: if isSignedIn();
       allow update: if isAdmin() || (isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['balance', 'status', 'email']));
       allow delete: if isAdmin();
+
+      // السماح بالوصول لجلسات الدردشة
+      match /chatSessions/{sessionId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+        
+        // السماح بالوصول للرسائل داخل الجلسات
+        match /messages/{messageId} {
+          allow read, write: if isOwner(userId) || isAdmin();
+        }
+      }
     }
 
     match /specializations/{specializationId} {
