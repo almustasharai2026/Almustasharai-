@@ -55,11 +55,11 @@ type Message = {
 };
 
 const CHARACTERS = [
+  { id: "ai-standard", name: "مستشارك الذكي", icon: "🤖", color: "from-primary/30 to-primary/5", desc: "إجابات سريعة وذكية لكافة التساؤلات", cost: 1 },
   { id: "lawyer", name: "المحامي الفائق", icon: "⚖️", color: "from-blue-600/30 to-indigo-600/10", desc: "خبير القضايا والنزاعات المعقدة", cost: 5 },
   { id: "judge", name: "خبير القضاء", icon: "👨‍⚖️", color: "from-slate-600/30 to-slate-900/10", desc: "رؤية ثاقبة من منصة الحكم", cost: 5 },
   { id: "consultant", name: "مستشار استراتيجي", icon: "🏢", color: "from-emerald-600/30 to-teal-600/10", desc: "نمو الشركات والصفقات التجارية", cost: 5 },
   { id: "notary", name: "الكاتب العدل", icon: "✒️", color: "from-amber-600/30 to-orange-600/10", desc: "صحة وتوثيق المستندات", cost: 1 },
-  { id: "forensic", name: "خبير جنائي", icon: "🔍", color: "from-zinc-600/30 to-black/10", desc: "تحليل الأدلة الجنائية", cost: 5 },
 ];
 
 const DISCLAIMER_TEXT = "\n\n--- \n⚠️ إخلاء مسؤولية: هذا الرد نتاج تحليل ذكاء اصطناعي لأغراض استرشادية فقط.";
@@ -118,7 +118,7 @@ export default function BotPage() {
       toast({
         variant: "destructive",
         title: "رصيد غير كافٍ",
-        description: `تحتاج إلى ${cost} EGP على الأقل لهذه الاستشارة. رصيدك الحالي: ${currentBalance} EGP.`,
+        description: `تحتاج إلى شحن رصيدك للمتابعة. تكلفة هذه الرسالة: ${cost} EGP.`,
       });
       return;
     }
@@ -173,7 +173,7 @@ export default function BotPage() {
 
       setInput("");
     } catch (error) {
-      toast({ variant: "destructive", title: "خطأ سيادي", description: "فشل في معالجة الاستشارة." });
+      toast({ variant: "destructive", title: "خطأ في النظام", description: "فشل في معالجة طلبك، يرجى المحاولة لاحقاً." });
     } finally {
       setIsLoading(false);
     }
@@ -190,9 +190,9 @@ export default function BotPage() {
            </Button>
 
            <div className="grid grid-cols-4 gap-2">
-              <SidebarIcon icon={<History />} label="المشاريع" />
-              <SidebarIcon icon={<Briefcase />} label="التطبيقات" />
-              <SidebarIcon icon={<ImageIcon />} label="الصور" />
+              <SidebarIcon icon={<History />} label="الأرشيف" />
+              <SidebarIcon icon={<Briefcase />} label="الحقيبة" />
+              <SidebarIcon icon={<ImageIcon />} label="المرفقات" />
               <SidebarIcon icon={<Sparkles className="text-primary" />} label="الترقية" onClick={() => router.push('/pricing')} />
            </div>
         </div>
@@ -238,7 +238,7 @@ export default function BotPage() {
                 <h1 className="text-lg font-black text-white">{activeChar.name}</h1>
                 <p className="text-[10px] text-primary font-black uppercase tracking-widest flex items-center gap-2">
                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                   تكلفة الرد: {activeChar.cost} EGP
+                   تكلفة الرسالة: {activeChar.cost} EGP
                 </p>
              </div>
           </div>
@@ -263,7 +263,7 @@ export default function BotPage() {
             {messages?.length === 0 && (
               <div className="py-20 text-center space-y-6 opacity-20">
                  <Scale className="h-20 w-20 mx-auto" />
-                 <p className="text-2xl font-black">ابدأ استشارتك القانونية السيادية الآن</p>
+                 <p className="text-2xl font-black">اطرح استفسارك القانوني لنبدأ التحليل</p>
               </div>
             )}
             {messages?.map((msg) => (
@@ -301,7 +301,7 @@ export default function BotPage() {
           <div className="max-w-4xl mx-auto flex gap-4 items-end">
             <div className="flex-grow relative">
               <Input 
-                placeholder={`اسأل ${activeChar.name}... (سيتم خصم ${activeChar.cost} EGP)`} 
+                placeholder={`اكتب سؤالك هنا...`} 
                 className="pr-6 pl-16 text-right glass border-white/[0.03] rounded-2xl h-14 text-lg focus-visible:ring-1 ring-primary/40"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -326,7 +326,7 @@ export default function BotPage() {
               <Mic className="h-5 w-5 opacity-30" />
             </Button>
           </div>
-          <p className="text-[10px] text-center mt-6 opacity-20 font-black uppercase tracking-[0.4em] text-white">Advanced Legal Core AI Engine - v4.0 Platinum</p>
+          <p className="text-[10px] text-center mt-6 opacity-20 font-black uppercase tracking-[0.4em] text-white">نظام الاستشارة الذكي - الجيل الرابع</p>
         </div>
       </main>
     </div>
