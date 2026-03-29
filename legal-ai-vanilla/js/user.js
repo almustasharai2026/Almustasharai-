@@ -18,9 +18,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadPaymentRequests() {
         try {
-            const res = await fetch('http://localhost:3000/requests');
-            const requests = await res.json();
-            const userRequests = requests.filter(req => req.username === userData.username);
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const res = await fetch('/api/requests', {
+                headers: {
+                    'Authorization': `Bearer ${userData.token}`
+                }
+            });
+            const data = await res.json();
+            const requests = data.requests || [];
+            const userRequests = requests.filter(req => req.user_id === userData.id);
 
             if (!userRequests.length) {
                 paymentRequestsList.innerHTML = '<p>لا توجد طلبات دفع</p>';
@@ -32,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="request-info">
                     <strong>المبلغ: ${request.amount} جنيه</strong>
                     <span>الحالة: ${getStatusText(request.status)}</span>
-                    <span>التاريخ: ${new Date(request.createdAt).toLocaleDateString('ar')}</span>
+                    <span>التاريخ: ${new Date(request.created_at).toLocaleDateString('ar')}</span>
                 </div>
                 ${request.status === 'pending' ? '<div class="status-pending">قيد المراجعة</div>' : ''}
                 ${request.status === 'accepted' ? '<div class="status-accepted">تم القبول</div>' : ''}

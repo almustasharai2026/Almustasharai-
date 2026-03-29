@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const password = document.getElementById('password').value;
 
             try {
-                const res = await fetch('http://localhost:3000/login', {
+                const res = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const data = await res.json();
                 const userData = {
-                    role: data.role,
-                    username: data.username,
-                    balance: data.balance,
+                    role: data.user.role,
+                    username: data.user.username,
+                    balance: data.user.balance,
                     email,
                     token: data.token
                 };

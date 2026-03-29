@@ -1,18 +1,23 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "artifacts/legal-ai/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/public"
-      }
+  "buildCommand": "cd artifacts/legal-ai && npm install && PORT=3000 BASE_PATH=/ npm run build",
+  "outputDirectory": "artifacts/legal-ai/dist/public",
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs18.x",
+      "memory": 1024,
+      "maxDuration": 30
     }
-  ],
+  },
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.js"
+    },
     {
       "src": "/(.*)",
       "dest": "/$1"
     }
   ]
 }
+

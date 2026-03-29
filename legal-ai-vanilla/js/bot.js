@@ -65,10 +65,13 @@ document.addEventListener('DOMContentLoaded', function() {
         showTypingIndicator();
 
         try {
-            const res = await fetch('http://localhost:3000/ask', {
+            const res = await fetch('/api/ask', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question, role: selectedPersona, username: userData.username })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userData.token}`
+                },
+                body: JSON.stringify({ question, personaId: selectedPersona })
             });
 
             const data = await res.json();

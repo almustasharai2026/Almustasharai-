@@ -21,7 +21,7 @@ async function apiRequest(path, options = {}) {
     return null;
   }
 
-  const res = await fetch(`http://localhost:3000${path}`, {
+  const res = await fetch(`/api${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
