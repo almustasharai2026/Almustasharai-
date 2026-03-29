@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -37,6 +38,7 @@ export default function Dashboard() {
   const router = useRouter();
   const { toast } = useToast();
   const [chargeAmount, setChargeAmount] = useState("");
+  const [isCharging, setIsCharging] = useState(false);
 
   const userDocRef = useMemoFirebase(() => user ? doc(db!, "users", user.uid) : null, [db, user]);
   const { data: profile } = useDoc(userDocRef);
@@ -49,22 +51,31 @@ export default function Dashboard() {
   };
 
   const handleChargeRequest = async () => {
-    if (!chargeAmount || !user) return;
+    if (!chargeAmount || !user || !db) {
+      toast({ variant: "destructive", title: "بيانات ناقصة", description: "يرجى إدخال المبلغ المراد شحنه." });
+      return;
+    }
+    
+    setIsCharging(true);
     try {
-      await addDoc(collection(db!, "paymentRequests"), {
+      await addDoc(collection(db, "paymentRequests"), {
         userId: user.uid,
+        userName: profile?.fullName || user.email,
         userEmail: user.email,
         amount: Number(chargeAmount),
         status: "pending",
-        timestamp: new Date().toISOString()
+        type: "wallet_transfer",
+        createdAt: new Date().toISOString()
       });
       toast({
         title: "تم إرسال الطلب",
-        description: "سيتم مراجعة إيصالك وتحديث رصيدك خلال ١٥ دقيقة.",
+        description: "سيتم مراجعة إيصال التحويل وتحديث رصيدك خلال ١٥ دقيقة.",
       });
       setChargeAmount("");
     } catch (e) {
-      toast({ variant: "destructive", title: "خطأ", description: "فشل في إرسال الطلب." });
+      toast({ variant: "destructive", title: "خطأ في النظام", description: "فشل في إرسال طلب الشحن، يرجى المحاولة لاحقاً." });
+    } finally {
+      setIsCharging(false);
     }
   };
 
@@ -75,13 +86,10 @@ export default function Dashboard() {
     </div>
   );
 
-  if (!user) return (
-    <div className="container py-32 text-center space-y-6">
-      <ShieldAlert className="h-20 w-20 mx-auto text-red-500 opacity-20" />
-      <h2 className="text-3xl font-black">الدخول مرفوض</h2>
-      <Link href="/auth/login"><Button className="btn-primary rounded-xl px-12">تسجيل الدخول</Button></Link>
-    </div>
-  );
+  if (!user) {
+    router.push("/auth/login");
+    return null;
+  }
 
   const isAdmin = user.email === "bishoysamy390@gmail.com";
 
@@ -112,7 +120,7 @@ export default function Dashboard() {
           <p className="text-muted-foreground opacity-60">أهلاً بك في مركز قيادتك القانوني الخاص.</p>
         </div>
         <div className="flex gap-4">
-          <Button variant="outline" className="glass rounded-2xl h-14 border-white/10 hover:bg-white/5">
+          <Button variant="outline" className="glass rounded-2xl h-14 border-white/10 hover:bg-white/5" onClick={() => toast({ title: "الإعدادات", description: "سيتم تفعيل تخصيص الحساب قريباً." })}>
             <Settings className="h-5 w-5 ml-2" /> الإعدادات
           </Button>
           <Button variant="destructive" className="rounded-2xl h-14 bg-red-600/10 text-red-500 border-none" onClick={handleLogout}>
@@ -162,11 +170,20 @@ export default function Dashboard() {
                 onChange={(e) => setChargeAmount(e.target.value)}
                 className="glass border-white/5 h-14 rounded-2xl text-xl text-center font-black"
               />
-              <div className="border-2 border-dashed border-white/10 rounded-2xl p-6 text-center hover:bg-white/5 transition-all cursor-pointer">
+              <div 
+                className="border-2 border-dashed border-white/10 rounded-2xl p-6 text-center hover:bg-white/5 transition-all cursor-pointer"
+                onClick={() => toast({ title: "رفع الإيصال", description: "يرجى اختيار صورة التحويل من جهازك." })}
+              >
                 <Upload className="h-8 w-8 mx-auto mb-2 opacity-30" />
                 <p className="text-xs font-bold opacity-40">ارفق صورة التحويل للتحقق</p>
               </div>
-              <Button onClick={handleChargeRequest} className="w-full btn-primary h-16 rounded-2xl text-xl font-black shadow-2xl">طلب شحن الرصيد</Button>
+              <Button 
+                onClick={handleChargeRequest} 
+                disabled={isCharging || !chargeAmount}
+                className="w-full btn-primary h-16 rounded-2xl text-xl font-black shadow-2xl"
+              >
+                {isCharging ? "جاري الإرسال..." : "طلب شحن الرصيد"}
+              </Button>
             </div>
           </Card>
         </div>
@@ -204,6 +221,7 @@ export default function Dashboard() {
             <Card className="glass border-none rounded-[3rem] p-20 text-center text-muted-foreground bg-white/5">
                <History className="h-12 w-12 opacity-20 mx-auto mb-4" />
                <p className="text-xl font-bold opacity-30">سجلك القانوني فارغ حالياً</p>
+               <Button variant="link" className="text-primary mt-4" onClick={() => router.push('/bot')}>ابدأ أول محادثة الآن</Button>
             </Card>
           </section>
         </div>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useUser, useFirestore, useCollection } from "@/firebase";
@@ -19,11 +20,13 @@ import {
   XCircle,
   AlertCircle,
   BarChart3,
-  Activity
+  Activity,
+  Loader2,
+  Image as ImageIcon
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { collection, deleteDoc, doc, addDoc, updateDoc, increment } from "firebase/firestore";
+import { collection, deleteDoc, doc, addDoc, updateDoc, increment, query, orderBy } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { useMemoFirebase } from "@/firebase/provider";
 
@@ -33,16 +36,19 @@ export default function AdminDashboard() {
   const router = useRouter();
   const { toast } = useToast();
   
-  // صلاحية المالك (بيشوي سامي)
   const isAdmin = user?.email === "bishoysamy390@gmail.com";
 
   const specQuery = useMemoFirebase(() => collection(db!, "specializations"), [db]);
-  const { data: specializations, isLoading: isSpecLoading } = useCollection(specQuery);
+  const { data: specializations } = useCollection(specQuery);
 
   const usersQuery = useMemoFirebase(() => collection(db!, "users"), [db]);
-  const { data: allUsers, isLoading: isUsersLoading } = useCollection(usersQuery);
+  const { data: allUsers } = useCollection(usersQuery);
+
+  const paymentQuery = useMemoFirebase(() => query(collection(db!, "paymentRequests"), orderBy("createdAt", "desc")), [db]);
+  const { data: paymentRequests, isLoading: isPaymentsLoading } = useCollection(paymentQuery);
 
   const [newSpec, setNewSpec] = useState({ name: "", description: "" });
+  const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
   if (!isUserLoading && !isAdmin) {
     router.push("/dashboard");
@@ -72,15 +78,38 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleApproveCredit = async (userId: string, amount: number) => {
+  const handleApproveCredit = async (requestId: string, userId: string, amount: number) => {
+    setIsProcessing(requestId);
     try {
-      // تحديث رصيد المستخدم فعلياً في Firestore
+      // 1. تحديث رصيد المستخدم
       await updateDoc(doc(db!, "users", userId), {
         balance: increment(amount)
       });
-      toast({ title: "تم القبول", description: `تم إضافة ${amount} جنيه إلى رصيد المستخدم.` });
+      // 2. تحديث حالة الطلب
+      await updateDoc(doc(db!, "paymentRequests", requestId), {
+        status: "approved",
+        approvedAt: new Date().toISOString()
+      });
+      toast({ title: "تم القبول", description: `تم إضافة ${amount} جنيه إلى رصيد المستخدم بنجاح.` });
     } catch (e) {
       toast({ variant: "destructive", title: "خطأ", description: "فشل في تحديث الرصيد." });
+    } finally {
+      setIsProcessing(null);
+    }
+  };
+
+  const handleRejectCredit = async (requestId: string) => {
+    setIsProcessing(requestId);
+    try {
+      await updateDoc(doc(db!, "paymentRequests", requestId), {
+        status: "rejected",
+        rejectedAt: new Date().toISOString()
+      });
+      toast({ title: "تم الرفض", description: "تم رفض طلب الشحن بنجاح." });
+    } catch (e) {
+      toast({ variant: "destructive", title: "خطأ", description: "فشل في تحديث الطلب." });
+    } finally {
+      setIsProcessing(null);
     }
   };
 
@@ -99,7 +128,7 @@ export default function AdminDashboard() {
           <p className="text-muted-foreground text-lg">أهلاً بك يا سيد بيشوي سامي. كل السلطات مفعلة لك.</p>
         </div>
         <div className="flex gap-4">
-           <Button variant="outline" className="rounded-2xl glass h-14 px-6 gap-3 border-white/10">
+           <Button variant="outline" className="rounded-2xl glass h-14 px-6 gap-3 border-white/10" onClick={() => toast({ title: "النسخ الاحتياطي", description: "جاري تجهيز نسخة من قاعدة البيانات..." })}>
               <Database className="h-5 w-5" /> النسخ الاحتياطي
            </Button>
            <Button className="cosmic-gradient rounded-2xl px-10 h-14 font-bold">تصدير التقارير</Button>
@@ -164,25 +193,46 @@ export default function AdminDashboard() {
           <Card className="glass-card border-none rounded-[3rem] p-10">
             <div className="space-y-8">
               <h3 className="text-2xl font-black mb-6">مراجعة طلبات التمويل</h3>
-              {/* محاكاة لطلبات حقيقية */}
-              <div className="p-8 glass rounded-[2.5rem] flex flex-col md:flex-row justify-between items-center gap-8 border-white/5">
-                <div className="flex gap-4">
-                  <Button onClick={() => handleApproveCredit('example_uid', 1000)} className="bg-emerald-600 hover:bg-emerald-700 rounded-2xl px-10 h-14 font-bold">
-                     قبول وشحن الرصيد
-                  </Button>
-                  <Button variant="outline" className="text-red-500 border-red-500/20 rounded-2xl px-10 h-14 font-bold">
-                     رفض الطلب
-                  </Button>
-                </div>
-                <div className="text-right flex items-center gap-6">
-                  <div>
-                    <h4 className="font-black text-2xl text-white">أحمد محمد</h4>
-                    <p className="text-primary font-black text-xl">1000 EGP</p>
+              
+              <div className="space-y-4">
+                {paymentRequests?.filter(r => r.status === "pending").map((request) => (
+                  <div key={request.id} className="p-8 glass rounded-[2.5rem] flex flex-col md:flex-row justify-between items-center gap-8 border-white/5">
+                    <div className="flex gap-4">
+                      <Button 
+                        onClick={() => handleApproveCredit(request.id, request.userId, request.amount)} 
+                        disabled={isProcessing === request.id}
+                        className="bg-emerald-600 hover:bg-emerald-700 rounded-2xl px-10 h-14 font-bold"
+                      >
+                         {isProcessing === request.id ? <Loader2 className="h-5 w-5 animate-spin" /> : "قبول وشحن الرصيد"}
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => handleRejectCredit(request.id)}
+                        disabled={isProcessing === request.id}
+                        className="text-red-500 border-red-500/20 rounded-2xl px-10 h-14 font-bold"
+                      >
+                         رفض الطلب
+                      </Button>
+                    </div>
+                    <div className="text-right flex items-center gap-6">
+                      <div>
+                        <h4 className="font-black text-2xl text-white">{request.userName || "مستخدم غير معروف"}</h4>
+                        <p className="text-primary font-black text-xl">{request.amount} EGP</p>
+                        <p className="text-[10px] opacity-40">{new Date(request.createdAt).toLocaleString('ar-EG')}</p>
+                      </div>
+                      <div className="h-20 w-20 glass rounded-2xl flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors">
+                         <ImageIcon className="h-8 w-8 opacity-40 text-primary" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="h-20 w-20 glass rounded-2xl flex items-center justify-center">
-                     <img src="https://picsum.photos/seed/pay/100/100" alt="receipt" className="rounded-xl opacity-60" />
+                ))}
+                
+                {paymentRequests?.filter(r => r.status === "pending").length === 0 && (
+                  <div className="text-center py-20 opacity-30">
+                    <CheckCircle className="h-16 w-16 mx-auto mb-4" />
+                    <p className="text-xl font-bold">لا توجد طلبات شحن معلقة حالياً.</p>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </Card>
@@ -207,7 +257,7 @@ export default function AdminDashboard() {
                         <td className="px-6 py-6 opacity-60">{u.email}</td>
                         <td className="px-6 py-6 text-primary font-black">{u.balance || 0} EGP</td>
                         <td className="px-6 py-6">
-                          <Button variant="ghost" className="text-red-400">تجميد</Button>
+                          <Button variant="ghost" className="text-red-400" onClick={() => toast({ title: "تجميد الحساب", description: "سيتم تفعيل تجميد الحسابات في النسخة القادمة." })}>تجميد</Button>
                         </td>
                       </tr>
                     ))}

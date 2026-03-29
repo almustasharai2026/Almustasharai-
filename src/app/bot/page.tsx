@@ -21,7 +21,8 @@ import {
   Settings,
   X,
   ChevronRight,
-  MessageSquare
+  MessageSquare,
+  MicOff
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -55,6 +56,8 @@ export default function BotPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeChar, setActiveChar] = useState(CHARACTERS[0]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isRecording, setIsRecording] = useState(false);
+  
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -81,6 +84,7 @@ export default function BotPage() {
     setInput("");
     setIsLoading(true);
 
+    // محاكاة لرد الذكاء الاصطناعي
     setTimeout(() => {
       const botMsg: Message = { 
         id: (Date.now() + 1).toString(), 
@@ -92,6 +96,15 @@ export default function BotPage() {
       setMessages(prev => [...prev, botMsg]);
       setIsLoading(false);
     }, 1500);
+  };
+
+  const toggleRecording = () => {
+    setIsRecording(!isRecording);
+    if (!isRecording) {
+      toast({ title: "جاري التسجيل...", description: "تحدث الآن، سيتم تحويل صوتك لنص قانوني." });
+    } else {
+      toast({ title: "تم الانتهاء", description: "جاري معالجة التسجيل الصوتي..." });
+    }
   };
 
   return (
@@ -158,7 +171,10 @@ export default function BotPage() {
              </div>
           </div>
           <div className="flex gap-2">
-             <Button variant="ghost" size="icon" className="rounded-2xl hover:bg-red-500/10 text-red-500/50 hover:text-red-500" onClick={() => setMessages([messages[0]])}>
+             <Button variant="ghost" size="icon" className="rounded-2xl hover:bg-red-500/10 text-red-500/50 hover:text-red-500" onClick={() => {
+               setMessages([messages[0]]);
+               toast({ title: "تم مسح المحادثة", description: "بدء جلسة استشارية جديدة." });
+             }}>
                 <Trash2 className="h-5 w-5" />
              </Button>
           </div>
@@ -223,10 +239,22 @@ export default function BotPage() {
         <div className="p-8 bg-background/40 backdrop-blur-2xl border-t border-white/[0.05]">
           <div className="max-w-4xl mx-auto flex gap-4 items-end">
             <div className="flex gap-2 pb-1">
-              <Button type="button" variant="ghost" size="icon" className="h-14 w-14 rounded-3xl glass hover:bg-white/10">
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="icon" 
+                className="h-14 w-14 rounded-3xl glass hover:bg-white/10"
+                onClick={() => toast({ title: "إرفاق ملف", description: "يرجى اختيار ملف PDF أو Word للتحليل." })}
+              >
                 <Paperclip className="h-5 w-5 opacity-40" />
               </Button>
-              <Button type="button" variant="ghost" size="icon" className="h-14 w-14 rounded-3xl glass hover:bg-white/10">
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="icon" 
+                className="h-14 w-14 rounded-3xl glass hover:bg-white/10"
+                onClick={() => toast({ title: "فتح الكاميرا", description: "جاري تشغيل عدسة المسح الضوئي للمستندات..." })}
+              >
                 <Camera className="h-5 w-5 opacity-40" />
               </Button>
             </div>
@@ -248,8 +276,14 @@ export default function BotPage() {
                 <Send className="h-5 w-5 rotate-180" />
               </Button>
             </div>
-            <Button type="button" variant="ghost" size="icon" className="h-14 w-14 rounded-3xl glass hover:bg-red-500/10 text-red-400">
-              <Mic className="h-5 w-5" />
+            <Button 
+              type="button" 
+              variant="ghost" 
+              size="icon" 
+              className={`h-14 w-14 rounded-3xl glass transition-all ${isRecording ? 'bg-red-500/20 text-red-500 animate-pulse' : 'hover:bg-red-500/10 text-red-400'}`}
+              onClick={toggleRecording}
+            >
+              {isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
             </Button>
           </div>
           <p className="text-[8px] text-center mt-6 opacity-20 font-black uppercase tracking-[0.3em]">الجيل الرابع من الذكاء الاصطناعي القانوني - الفئة الفاخرة</p>
