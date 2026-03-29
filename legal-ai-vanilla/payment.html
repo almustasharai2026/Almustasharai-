@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المستشار AI - الدفع</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>المستشار AI</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="templates.html">النماذج والقوالب</a></li>
+            <li><a href="user.html">لوحة المستخدم</a></li>
+            <li><a href="owner.html">لوحة الإدارة</a></li>
+            <li><a href="payment.html" class="active">الدفع</a></li>
+            <li class="divider"></li>
+            <li><button id="dark-mode-toggle">الوضع المظلم</button></li>
+            <li><button id="lang-toggle">English</button></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>نظام الدفع</h1>
+            <p class="subtitle">ادفع لشحن رصيدك واستمتع بالخدمات</p>
+
+            <!-- Payment Plans -->
+            <div class="payment-plans">
+                <h2>اختر خطة الدفع</h2>
+                <div class="plans-grid">
+                    <div class="plan-card" data-amount="50">
+                        <h3>خطة أساسية</h3>
+                        <p class="price">50 جنيه</p>
+                        <p>50 استشارة</p>
+                        <button class="btn-primary select-plan">اختر الخطة</button>
+                    </div>
+                    <div class="plan-card" data-amount="100">
+                        <h3>خطة متوسطة</h3>
+                        <p class="price">100 جنيه</p>
+                        <p>120 استشارة</p>
+                        <button class="btn-primary select-plan">اختر الخطة</button>
+                    </div>
+                    <div class="plan-card" data-amount="200">
+                        <h3>خطة متقدمة</h3>
+                        <p class="price">200 جنيه</p>
+                        <p>250 استشارة</p>
+                        <button class="btn-primary select-plan">اختر الخطة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div id="payment-form" class="payment-form" style="display: none;">
+                <h2>تفاصيل الدفع</h2>
+                <div class="payment-details">
+                    <div class="detail-item">
+                        <label>رقم المحفظة:</label>
+                        <span class="wallet-number">0201130031531</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>رقم المستلم:</label>
+                        <span class="receiver-number">0201130031531</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>المبلغ:</label>
+                        <span id="selected-amount"></span> جنيه
+                    </div>
+                </div>
+
+                <form id="payment-submit-form">
+                    <div class="form-group">
+                        <label for="username">اسم المستخدم:</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="screenshot">لقطة شاشة التحويل:</label>
+                        <input type="file" id="screenshot" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn-primary">إرسال طلب الدفع</button>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div id="payment-success" class="success-message" style="display: none;">
+                <h2>تم إرسال طلب الدفع بنجاح!</h2>
+                <p>سيتم مراجعة طلبك خلال 24 ساعة. ستتلقى إشعاراً عند الموافقة.</p>
+                <p>تم إرسال التفاصيل إلى: Infoalmustasharai@gmail.com و WhatsApp: 0201130031531</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/payment.js"></script>
+</body>
+</html>

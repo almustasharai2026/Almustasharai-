@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المستشار AI - طلبات الدفع</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>طلبات الدفع</h1>
+      <nav>
+        <a href="index.html">بوت</a>
+        <a href="login.html">تسجيل خروج</a>
+        <a id="admin-link" href="admin.html" style="display:none;">الإدارة</a>
+      </nav>
+    </header>
+
+    <section class="card">
+      <h2>💳 إرسال طلب شحن</h2>
+      <label for="req-amount">💰 المبلغ المراد شحنه</label>
+      <input id="req-amount" type="number" placeholder="مثال: 10" />
+      <label for="req-screenshot">📸 لقطة شاشة للدفع (اختياري)</label>
+      <input id="req-screenshot" type="file" accept="image/*" />
+      <button id="send-request-btn">📤 إرسال الطلب</button>
+    </section>
+
+    <section class="card">
+      <h2>📋 جميع الطلبات</h2>
+      <table id="requests-table">
+        <thead><tr><th>المستخدم</th><th>المبلغ</th><th>الحالة</th><th>اللقطة</th><th>الإجراءات</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="request-msg" class="muted"></section>
+  </main>
+
+  <script src="js/requests.js"></script>
+</body>
+</html>

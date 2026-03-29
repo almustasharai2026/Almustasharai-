@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المستشار AI - النماذج الحكومية</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/forms-blog.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>المستشار AI</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="forms.html" class="active">النماذج الحكومية</a></li>
+            <li><a href="blog.html">الاستشارات والمقالات</a></li>
+            <li><a href="user.html">لوحة المستخدم</a></li>
+            <li><a href="owner.html">لوحة الإدارة</a></li>
+            <li class="divider"></li>
+            <li><button id="dark-mode-toggle">الوضع المظلم</button></li>
+            <li><button id="lang-toggle">English</button></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="forms-header">
+                <h1>النماذج الحكومية المعتمدة</h1>
+                <p class="subtitle">أكثر من 50 نموذج حكومي جاهز للطباعة والاستخدام الفوري</p>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="forms-controls">
+                <input type="text" id="forms-search" placeholder="ابحث عن نموذج..." class="search-input">
+                <select id="forms-category" class="category-select">
+                    <option value="">جميع الفئات</option>
+                    <option value="عقود">عقود</option>
+                    <option value="شركات">شركات</option>
+                    <option value="عمل">عمل</option>
+                    <option value="عقارات">عقارات</option>
+                    <option value="أسرة">أحوال شخصية</option>
+                    <option value="تجارة">تجارة</option>
+                    <option value="إجراءات">إجراءات قانونية</option>
+                    <option value="ضرائب">ضرائب</option>
+                </select>
+            </div>
+
+            <!-- Forms Grid -->
+            <div class="forms-grid" id="forms-grid">
+                <!-- Forms will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/forms.js"></script>
+</body>
+</html>

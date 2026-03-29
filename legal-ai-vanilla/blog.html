@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المستشار AI - الاستشارات والمقالات</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/forms-blog.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>المستشار AI</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="forms.html">النماذج الحكومية</a></li>
+            <li><a href="blog.html" class="active">الاستشارات والمقالات</a></li>
+            <li><a href="user.html">لوحة المستخدم</a></li>
+            <li><a href="owner.html">لوحة الإدارة</a></li>
+            <li class="divider"></li>
+            <li><button id="dark-mode-toggle">الوضع المظلم</button></li>
+            <li><button id="lang-toggle">English</button></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="blog-header">
+                <h1>الاستشارات والمقالات القانونية</h1>
+                <p class="subtitle">مقالات متخصصة وملخصات قانونية من خبراء متخصصين</p>
+            </div>
+
+            <!-- Write New Article Section (for authenticated users) -->
+            <div id="write-section" class="write-section" style="display: none;">
+                <h2>اكتب مقالة جديدة</h2>
+                <form id="article-form" class="article-form">
+                    <div class="form-group">
+                        <label for="article-title">عنوان المقالة</label>
+                        <input type="text" id="article-title" placeholder="أدخل عنوان المقالة..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="article-category">الفئة</label>
+                        <select id="article-category" required>
+                            <option value="">اختر فئة</option>
+                            <option value="عقود">عقود</option>
+                            <option value="عمل">علاقات عمل</option>
+                            <option value="عقارات">عقارات</option>
+                            <option value="شركات">شركات</option>
+                            <option value="أسرة">أحوال شخصية</option>
+                            <option value="تجارة">تجارة</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="article-content">محتوى المقالة</label>
+                        <textarea id="article-content" placeholder="اكتب محتوى المقالة هنا..." rows="10" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="article-tags">الوسوم (مفصولة بفواصل)</label>
+                        <input type="text" id="article-tags" placeholder="مثال: عقود، قانون عمل">
+                    </div>
+                    <button type="submit" class="btn-primary">نشر المقالة</button>
+                    <button type="button" class="btn-secondary" id="cancel-write">إلغاء</button>
+                </form>
+            </div>
+
+            <!-- New Article Button -->
+            <div class="blog-controls" id="blog-controls">
+                <button id="new-article-btn" class="btn-primary" style="display: none;">كتابة مقالة جديدة</button>
+                <div class="search-filter">
+                    <input type="text" id="blog-search" placeholder="ابحث عن مقالة..." class="search-input">
+                    <select id="blog-category" class="category-select">
+                        <option value="">جميع الفئات</option>
+                        <option value="عقود">عقود</option>
+                        <option value="عمل">علاقات عمل</option>
+                        <option value="عقارات">عقارات</option>
+                        <option value="شركات">شركات</option>
+                        <option value="أسرة">أحوال شخصية</option>
+                        <option value="تجارة">تجارة</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Articles List -->
+            <div class="articles-list" id="articles-list">
+                <!-- Articles will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/blog.js"></script>
+</body>
+</html>

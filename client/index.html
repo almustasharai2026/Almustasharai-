@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المستشار - البوت الذكي</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <h1>⚖️ المستشار</h1>
+        </div>
+        <div class="navbar-links">
+          <a href="index.html" class="nav-link active">🤖 البوت</a>
+          <a href="templates.html" class="nav-link">📄 القوالب</a>
+          <a href="user.html" class="nav-link">👤 حسابي</a>
+          <a href="owner.html" class="nav-link" id="admin-link" style="display:none;">👨‍💼 الإدارة</a>
+        </div>
+        <div class="navbar-actions">
+          <button id="lang-toggle" class="btn-icon">🌐 EN</button>
+          <button id="theme-toggle" class="btn-icon">🌙</button>
+          <button id="logout-btn" class="btn btn-danger">خروج</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <div class="bot-layout">
+          <!-- Sidebar - Personas -->
+          <aside class="personas-sidebar">
+            <h2>🎯 الاستشاريون</h2>
+            <div id="personas-list" class="personas-list">
+              <!-- Personas will be loaded here -->
+            </div>
+          </aside>
+
+          <!-- Bot Chat Area -->
+          <section class="chat-section">
+            <div class="chat-header">
+              <h2 id="selected-persona-name">المحامي المتخصص</h2>
+              <p id="selected-persona-desc">محامي قانوني متخصص في الاستشارات</p>
+              <div class="credits-badge">💰 <span id="credits-display">0</span> وحدة</div>
+            </div>
+
+            <div id="chat-messages" class="chat-messages">
+              <div class="message-welcome">
+                <h3>مرحباً بك في المستشار الذكي 👋</h3>
+                <p>اختر استشاراً من الجانب واطرح سؤالك القانوني</p>
+              </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+              <div class="input-tabs">
+                <button class="tab-btn active" data-tab="question">📝 السؤال</button>
+                <button class="tab-btn" data-tab="file">📁 الملف</button>
+                <button class="tab-btn" data-tab="audio">🎤 صوت</button>
+                <button class="tab-btn" data-tab="photo">📸 صورة</button>
+              </div>
+
+              <div class="input-content">
+                <!-- Question Tab -->
+                <div class="tab-content active" id="question-tab">
+                  <textarea 
+                    id="question-input" 
+                    placeholder="اطرح سؤالك القانوني هنا..."
+                    rows="3"
+                  ></textarea>
+                  <div class="input-actions">
+                    <span id="char-count">0 / 2000</span>
+                    <button id="ask-btn" class="btn btn-primary">💬 اسأل</button>
+                  </div>
+                </div>
+
+                <!-- File Tab -->
+                <div class="tab-content" id="file-tab">
+                  <div class="file-upload-area">
+                    <input type="file" id="file-input" accept=".pdf,.txt,.doc,.docx" />
+                    <label for="file-input" class="file-label">
+                      📎 انقر أو اسحب ملفاً هنا
+                    </label>
+                    <p class="file-formats">الصيغ المدعومة: PDF, TXT, DOC, DOCX</p>
+                  </div>
+                  <textarea 
+                    id="file-question" 
+                    placeholder="أضف سؤالاً عن الملف (اختياري)"
+                    rows="2"
+                  ></textarea>
+                  <button id="upload-ask-btn" class="btn btn-primary">📤 رفع واسأل</button>
+                </div>
+
+                <!-- Audio Tab -->
+                <div class="tab-content" id="audio-tab">
+                  <div class="audio-controls">
+                    <button id="record-btn" class="btn btn-primary">🎤 ابدأ التسجيل</button>
+                    <button id="stop-record-btn" class="btn btn-danger" style="display:none;">⏹️ توقف</button>
+                  </div>
+                  <div id="audio-preview" style="display:none;" class="audio-preview">
+                    <audio id="audio-playback" controls></audio>
+                    <button id="send-audio-btn" class="btn btn-primary">📤 إرسال الصوت</button>
+                  </div>
+                  <p class="info-text">سيتم تحويل الصوت إلى نص تلقائياً</p>
+                </div>
+
+                <!-- Photo Tab -->
+                <div class="tab-content" id="photo-tab">
+                  <div class="photo-upload-area">
+                    <input type="file" id="photo-input" accept="image/*" />
+                    <label for="photo-input" class="file-label">
+                      📸 انقر أو اسحب صورة هنا
+                    </label>
+                  </div>
+                  <div id="photo-preview" style="display:none;">
+                    <img id="photo-display" src="" alt="Preview" />
+                    <button id="clear-photo-btn" class="btn btn-danger">🗑️ حذف</button>
+                  </div>
+                  <textarea 
+                    id="photo-question" 
+                    placeholder="اطرح سؤالاً عن الصورة"
+                    rows="2"
+                  ></textarea>
+                  <button id="send-photo-btn" class="btn btn-primary">📤 إرسال</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- History Sidebar (Mobile) -->
+        <aside class="history-sidebar">
+          <h3>📋 السجل الأخير</h3>
+          <button id="clear-history-btn" class="btn btn-small">🗑️ مسح السجل</button>
+          <div id="history-list" class="history-list">
+            <!-- History items will be loaded here -->
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loading-indicator" class="loading-indicator" style="display:none;">
+    <div class="spinner"></div>
+    <p>جاري معالجة طلبك...</p>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="lang.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/bot.js"></script>
+</body>
+</html>

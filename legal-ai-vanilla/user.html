@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المستشار AI - لوحة المستخدم</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>المستشار AI</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="templates.html">النماذج والقوالب</a></li>
+            <li><a href="user.html" class="active">لوحة المستخدم</a></li>
+            <li><a href="owner.html">لوحة الإدارة</a></li>
+            <li><a href="payment.html">الدفع</a></li>
+            <li class="divider"></li>
+            <li><button id="dark-mode-toggle">الوضع المظلم</button></li>
+            <li><button id="lang-toggle">English</button></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>لوحة المستخدم</h1>
+            <p class="subtitle">استعراض رصيدك واستشاراتك السابقة</p>
+
+            <!-- Balance Section -->
+            <div class="balance-section">
+                <h2>الرصيد الحالي</h2>
+                <div class="balance-display">
+                    <span id="current-balance">0</span> استشارة
+                </div>
+            </div>
+
+            <!-- Payment Status -->
+            <div class="payment-status">
+                <h2>حالة الدفعات</h2>
+                <div id="payment-requests-list">
+                    <!-- Payment requests will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Consultation History -->
+            <div class="consultations-list">
+                <h2>تاريخ الاستشارات</h2>
+                <div id="consultation-history">
+                    <!-- History will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/user.js"></script>
+    <script src="js/requests.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المستشار AI - لوحة الإدارة</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>لوحة الإدارة</h1>
+      <nav>
+        <a href="index.html">بوت</a>
+        <a href="requests.html">طلبات الشحن</a>
+        <a href="login.html">تسجيل خروج</a>
+      </nav>
+    </header>
+
+    <section class="card" id="stats-section">
+      <h2>📊 الإحصائيات</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3 id="total-users">0</h3>
+          <p>👥 إجمالي المستخدمين</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="total-revenue">0</h3>
+          <p>💰 إجمالي الإيرادات</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="pending-requests">0</h3>
+          <p>⏳ طلبات معلقة</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="accepted-requests">0</h3>
+          <p>✅ طلبات مقبولة</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>👥 جميع المستخدمين</h2>
+      <table id="users-table">
+        <thead><tr><th>ID</th><th>📧 البريد</th><th>👤 الاسم</th><th>🔒 الدور</th><th>💵 الرصيد</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>💳 طلبات الدفع</h2>
+      <div class="filters">
+        <label for="status-filter">🔍 تصفية بالحالة:</label>
+        <select id="status-filter">
+          <option value="">الكل</option>
+          <option value="pending">⏳ معلق</option>
+          <option value="accepted">✅ مقبول</option>
+          <option value="rejected">❌ مرفوض</option>
+        </select>
+      </div>
+      <table id="requests-table">
+        <thead><tr><th>👤 المستخدم</th><th>💰 المبلغ</th><th>📊 الحالة</th><th>📸 اللقطة</th><th>⚙️ الإجراءات</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="admin-msg" class="muted"></section>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

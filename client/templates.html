@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المستشار - القوالب القانونية</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <h1>⚖️ المستشار</h1>
+        </div>
+        <div class="navbar-links">
+          <a href="index.html" class="nav-link">🤖 البوت</a>
+          <a href="templates.html" class="nav-link active">📄 القوالب</a>
+          <a href="user.html" class="nav-link">👤 حسابي</a>
+          <a href="owner.html" class="nav-link" id="admin-link" style="display:none;">👨‍💼 الإدارة</a>
+        </div>
+        <div class="navbar-actions">
+          <button id="lang-toggle" class="btn-icon">🌐 EN</button>
+          <button id="theme-toggle" class="btn-icon">🌙</button>
+          <button id="logout-btn" class="btn btn-danger">خروج</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <section class="page-header">
+          <h1>📄 القوالب القانونية</h1>
+          <p>حمّل قوالب قانونية جاهزة للاستخدام بصيغة PDF أو Word</p>
+        </section>
+
+        <div class="templates-grid">
+          <!-- Contract Template -->
+          <div class="template-card">
+            <div class="template-icon">📜</div>
+            <h3>عقد شراء عقار</h3>
+            <p>عقد قانوني شامل لشراء العقارات مع جميع البنود الأساسية</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('contract', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('contract', 'word')">📥 Word</button>
+            </div>
+          </div>
+
+          <!-- Lease Agreement -->
+          <div class="template-card">
+            <div class="template-icon">🏠</div>
+            <h3>عقد الإيجار</h3>
+            <p>عقد إيجار سكني شامل مع جميع الشروط والأحكام</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('lease', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('lease', 'word')">📥 Word</button>
+            </div>
+          </div>
+
+          <!-- Partnership Agreement -->
+          <div class="template-card">
+            <div class="template-icon">🤝</div>
+            <h3>عقد الشراكة</h3>
+            <p>عقد شراكة تجارية مع توزيع الأرباح والخسائر</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('partnership', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('partnership', 'word')">📥 Word</button>
+            </div>
+          </div>
+
+          <!-- Employment Contract -->
+          <div class="template-card">
+            <div class="template-icon">💼</div>
+            <h3>عقد التوظيف</h3>
+            <p>عقد عمل شامل مع كافة الحقوق والواجبات</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('employment', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('employment', 'word')">📥 Word</button>
+            </div>
+          </div>
+
+          <!-- Loan Agreement -->
+          <div class="template-card">
+            <div class="template-icon">💰</div>
+            <h3>عقد القرض</h3>
+            <p>عقد قرض مالي مع الفائدة والضمانات</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('loan', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('loan', 'word')">📥 Word</button>
+            </div>
+          </div>
+
+          <!-- Legal Letter -->
+          <div class="template-card">
+            <div class="template-icon">✉️</div>
+            <h3>رسالة قانونية رسمية</h3>
+            <p>رسالة قانونية احترافية للمراسلات الرسمية</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('letter', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('letter', 'word')">📥 Word</button>
+            </div>
+          </div>
+
+          <!-- Privacy Policy -->
+          <div class="template-card">
+            <div class="template-icon">🔒</div>
+            <h3>سياسة الخصوصية</h3>
+            <p>سياسة خصوصية احترافية للمواقع الإلكترونية</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('privacy', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('privacy', 'word')">📥 Word</button>
+            </div>
+          </div>
+
+          <!-- Terms of Service -->
+          <div class="template-card">
+            <div class="template-icon">📋</div>
+            <h3>الشروط والأحكام</h3>
+            <p>شروط الخدمة الشاملة للخدمات الإلكترونية</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('terms', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('terms', 'word')">📥 Word</button>
+            </div>
+          </div>
+
+          <!-- Non-Disclosure Agreement -->
+          <div class="template-card">
+            <div class="template-icon">🤫</div>
+            <h3>عقد السرية</h3>
+            <p>عقد عدم الإفصاح عن المعلومات السرية</p>
+            <div class="template-actions">
+              <button class="btn btn-small" onclick="downloadTemplate('nda', 'pdf')">📥 PDF</button>
+              <button class="btn btn-small" onclick="downloadTemplate('nda', 'word')">📥 Word</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loading-indicator" class="loading-indicator" style="display:none;">
+    <div class="spinner"></div>
+    <p>جاري تجهيز الملف...</p>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="lang.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/downloads.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="login_title">المستشار AI - تسجيل الدخول</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="auth-wrapper">
+    <header class="auth-header">
+      <h1 data-i18n="app_name">المستشار AI</h1>
+      <div class="auth-controls">
+        <button id="theme-toggle" class="btn btn-icon">🌙</button>
+        <button id="lang-toggle" class="btn btn-icon">🌐 EN</button>
+      </div>
+    </header>
+
+    <main class="auth-main card">
+      <div class="auth-switcher">
+        <a href="login.html" class="switch-btn active" id="tab-email">🔐 <span data-i18n="login">تسجيل الدخول</span></a>
+        <a href="register.html" class="switch-btn" id="tab-register">✍️ <span data-i18n="register">إنشاء حساب</span></a>
+      </div>
+
+      <div id="view-login" class="auth-form">
+        <h2 data-i18n="welcome_back">مرحبًا بعودتك</h2>
+        <p data-i18n="login_description">سجّل دخولك باستخدام البريد الإلكتروني أو الهاتف</p>
+
+        <div class="social-row">
+          <button class="btn btn-google" id="oauth-google">Google</button>
+          <button class="btn btn-facebook" id="oauth-facebook">Facebook</button>
+          <button class="btn btn-yahoo" id="oauth-yahoo">Yahoo</button>
+        </div>
+
+        <div class="separator"><span data-i18n="or">أو</span></div>
+
+        <div class="method-switch">
+          <button class="btn btn-secondary small active" data-method="email" id="method-email">📧 <span data-i18n="email_login">البريد الإلكتروني</span></button>
+          <button class="btn btn-secondary small" data-method="phone" id="method-phone">📱 <span data-i18n="phone_login">رقم الهاتف</span></button>
+        </div>
+
+        <form id="login-form" novalidate>
+          <div id="email-fields">
+            <label for="login-email" data-i18n="email">البريد الإلكتروني</label>
+            <input id="login-email" type="email" placeholder="you@domain.com" required data-i18n-placeholder="email_placeholder" />
+
+            <label for="login-password" data-i18n="password">كلمة المرور</label>
+            <input id="login-password" type="password" placeholder="********" required data-i18n-placeholder="password_placeholder" />
+          </div>
+
+          <div id="phone-fields" class="hidden">
+            <label for="login-phone" data-i18n="phone">الهاتف</label>
+            <input id="login-phone" type="tel" placeholder="+9665XXXXXXX" data-i18n-placeholder="phone_placeholder" />
+
+            <div class="code-row">
+              <input id="login-code" type="text" placeholder="123456" maxlength="6" data-i18n-placeholder="verification_code" />
+              <button id="send-code-btn" type="button" class="btn btn-secondary" data-i18n="send_code">إرسال رمز</button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="login-btn" data-i18n="login">دخول</button>
+          </div>
+        </form>
+
+        <div class="aside-links">
+          <a href="#" id="forgot-link" data-i18n="forgot_password">هل نسيت كلمة المرور؟</a>
+          <a href="register.html" data-i18n="create_account">إنشاء حساب جديد</a>
+        </div>
+
+        <div id="login-message" class="message hidden"></div>
+      </div>
+
+      <div id="view-forgot" class="auth-form hidden">
+        <h2 data-i18n="reset_password">إعادة تعيين كلمة المرور</h2>
+        <p data-i18n="reset_instructions">أدخل بريدك الإلكتروني أو رقم هاتفك لاستلام رمز التحقق.</p>
+
+        <form id="forgot-form" novalidate>
+          <label for="forgot-identifier" data-i18n="email_or_phone">البريد الإلكتروني أو الهاتف</label>
+          <input id="forgot-identifier" type="text" placeholder="you@domain.com أو +9665XXXXXXX" required data-i18n-placeholder="email_or_phone_placeholder" />
+          <button type="submit" class="btn btn-warning" data-i18n="send_reset_link">إرسال رابط إعادة التعيين</button>
+        </form>
+
+        <div id="forgot-status" class="message hidden"></div>
+
+        <div id="forgot-verify" class="hidden">
+          <form id="verify-form" novalidate>
+            <label for="verify-code" data-i18n="verification_code">رمز التحقق</label>
+            <input id="verify-code" type="text" maxlength="6" placeholder="123456" required />
+            <button type="submit" class="btn btn-primary" data-i18n="verify_code">تحقق</button>
+          </form>
+
+          <form id="reset-password-form" class="hidden" novalidate>
+            <label for="new-password" data-i18n="new_password">كلمة المرور الجديدة</label>
+            <input id="new-password" type="password" placeholder="••••••••" required />
+
+            <label for="confirm-password" data-i18n="confirm_password">تأكيد كلمة المرور</label>
+            <input id="confirm-password" type="password" placeholder="••••••••" required />
+
+            <button type="submit" class="btn btn-success" data-i18n="update_password">تحديث</button>
+          </form>
+
+          <div id="reset-status" class="message hidden"></div>
+        </div>
+
+        <div class="aside-links">
+          <a href="login.html" data-i18n="back_to_login">العودة لتسجيل الدخول</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="lang.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

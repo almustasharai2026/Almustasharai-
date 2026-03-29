@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المستشار - حسابي</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <h1>⚖️ المستشار</h1>
+        </div>
+        <div class="navbar-links">
+          <a href="index.html" class="nav-link">🤖 البوت</a>
+          <a href="templates.html" class="nav-link">📄 القوالب</a>
+          <a href="user.html" class="nav-link active">👤 حسابي</a>
+          <a href="owner.html" class="nav-link" id="admin-link" style="display:none;">👨‍💼 الإدارة</a>
+        </div>
+        <div class="navbar-actions">
+          <button id="lang-toggle" class="btn-icon">🌐 EN</button>
+          <button id="theme-toggle" class="btn-icon">🌙</button>
+          <button id="logout-btn" class="btn btn-danger">خروج</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <!-- Profile Header -->
+        <section class="profile-header">
+          <div class="profile-avatar">👤</div>
+          <div class="profile-info">
+            <h1 id="profile-username">المستخدم</h1>
+            <p id="profile-email">user@example.com</p>
+            <p id="profile-role" class="badge">مستخدم عادي</p>
+          </div>
+        </section>
+
+        <!-- Profile Layout -->
+        <div class="profile-layout">
+          <!-- Left Column - Account Info -->
+          <div class="profile-column">
+            <!-- Credits Card -->
+            <div class="card">
+              <h2>💰 الرصيد</h2>
+              <div class="credits-display">
+                <div class="credit-value">
+                  <span class="number" id="current-credits">0</span>
+                  <span class="text">وحدة</span>
+                </div>
+              </div>
+              <div class="credit-actions">
+                <button class="btn btn-primary" onclick="showCreditsModal()">➕ إضافة رصيد</button>
+                <button class="btn btn-secondary" onclick="showBuyCreditsModal()">🛒 شراء رصيد</button>
+              </div>
+            </card>
+
+            <!-- Account Settings -->
+            <div class="card">
+              <h2>⚙️ إعدادات الحساب</h2>
+              <div class="settings-group">
+                <label>البريد الإلكتروني:</label>
+                <div class="setting-value" id="setting-email">user@example.com</div>
+              </div>
+              <div class="settings-group">
+                <label>اسم المستخدم:</label>
+                <div class="setting-value" id="setting-username">username</div>
+              </div>
+              <div class="settings-group">
+                <label>الدور:</label>
+                <div class="setting-value" id="setting-role">مستخدم عادي</div>
+              </div>
+              <button class="btn btn-secondary" onclick="showChangePasswordModal()">🔐 تغيير كلمة المرور</button>
+            </div>
+
+            <!-- Preferences -->
+            <div class="card">
+              <h2>🎨 التفضيلات</h2>
+              <div class="settings-group">
+                <label for="language-select">اللغة:</label>
+                <select id="language-select" onchange="changeLanguage(this.value)">
+                  <option value="ar">العربية</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
+              <div class="settings-group">
+                <label for="theme-select">المظهر:</label>
+                <select id="theme-select" onchange="changeTheme(this.value)">
+                  <option value="light">فاتح</option>
+                  <option value="dark">داكن</option>
+                  <option value="auto">تلقائي</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column - Activity & Usage -->
+          <div class="profile-column">
+            <!-- Usage Statistics -->
+            <div class="card">
+              <h2>📊 الإحصائيات</h2>
+              <div class="stat-item">
+                <span class="stat-label">عدد الاستشارات:</span>
+                <span class="stat-value" id="total-consultations">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">الرصيد المستخدم:</span>
+                <span class="stat-value" id="credits-used">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">تاريخ الانضمام:</span>
+                <span class="stat-value" id="join-date">--</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">آخر نشاط:</span>
+                <span class="stat-value" id="last-activity">--</span>
+              </div>
+            </div>
+
+            <!-- Recent Consultations -->
+            <div class="card">
+              <h2>📋 آخر الاستشارات</h2>
+              <div id="recent-consultations" class="recent-list">
+                <p class="empty-state">لا توجد استشارات بعد</p>
+              </div>
+              <a href="index.html" class="btn btn-secondary" style="width: 100%;">
+                اذهب للبوت
+              </a>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="card danger">
+              <h2>⚠️ منطقة الخطر</h2>
+              <p>احترس! هذه الإجراءات لا يمكن التراجع عنها.</p>
+              <button class="btn btn-danger" onclick="deleteAccountButton()">
+                🗑️ حذف الحساب
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <!-- Add Credits Modal -->
+  <div id="credits-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>➕ إضافة رصيد</h2>
+        <button class="btn-close" onclick="closeModal('credits-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>اتصل بالإدارة لإضافة رصيد إلى حسابك</p>
+        <p>البريد: admin@almustashar.com</p>
+        <p>الهاتف: +966 XX XXX XXXX</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy Credits Modal -->
+  <div id="buy-credits-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🛒 شراء رصيد</h2>
+        <button class="btn-close" onclick="closeModal('buy-credits-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="package-select">
+          <div class="package-option" onclick="selectPackage(10, 50)">
+            <strong>10 وحدات</strong>
+            <span>50 ر.س</span>
+          </div>
+          <div class="package-option" onclick="selectPackage(25, 100)">
+            <strong>25 وحدة</strong>
+            <span>100 ر.س</span>
+          </div>
+          <div class="package-option" onclick="selectPackage(50, 180)">
+            <strong>50 وحدة</strong>
+            <span>180 ر.س (توفير)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="password-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🔐 تغيير كلمة المرور</h2>
+        <button class="btn-close" onclick="closeModal('password-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="password" id="current-password" placeholder="كلمة المرور الحالية" />
+        <input type="password" id="new-password" placeholder="كلمة المرور الجديدة" />
+        <input type="password" id="confirm-password" placeholder="تأكيد كلمة المرور الجديدة" />
+        <button class="btn btn-primary" onclick="changePassword()">تحديث</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loading-indicator" class="loading-indicator" style="display:none;">
+    <div class="spinner"></div>
+    <p>جاري التحميل...</p>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="lang.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/user.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المستشار AI - اسأل المستشار</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>المستشار AI</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html" class="active">الرئيسية</a></li>
+            <li><a href="templates.html">النماذج والقوالب</a></li>
+            <li><a href="user.html">لوحة المستخدم</a></li>
+            <li><a href="owner.html">لوحة الإدارة</a></li>
+            <li><a href="payment.html">الدفع</a></li>
+            <li class="divider"></li>
+            <li><button id="dark-mode-toggle">الوضع المظلم</button></li>
+            <li><button id="lang-toggle">English</button></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Welcome Screen (shown when no messages) -->
+            <div id="welcome-screen" class="welcome-screen">
+                <h1>اسأل المستشار</h1>
+                <p class="subtitle">اطرح سؤالك القانوني وسيتم الرد عليك بصياغة قانونية محترفة</p>
+
+                <!-- Persona Selector -->
+                <div class="persona-selector">
+                    <label for="persona-select">اختر الشخصية القانونية:</label>
+                    <select id="persona-select">
+                        <option value="legal-advisor">مستشار قانوني</option>
+                        <option value="lawyer">محامي</option>
+                        <option value="judge">قاضي</option>
+                        <option value="corporate-lawyer">محامي شركات</option>
+                        <option value="criminal-lawyer">محامي جنائي</option>
+                        <option value="family-lawyer">محامي أسرة</option>
+                        <option value="contract-specialist">أخصائي عقود</option>
+                        <option value="legal-researcher">باحث قانوني</option>
+                        <option value="appeal-expert">خبير استئناف</option>
+                    </select>
+                </div>
+
+                <!-- Example Buttons -->
+                <div class="examples">
+                    <p>أمثلة على الأسئلة:</p>
+                    <div class="example-buttons">
+                        <button class="example-btn" data-question="ما هي حقوقي في عقد العمل؟">عقد عمل</button>
+                        <button class="example-btn" data-question="كيف أحل نزاع قانوني؟">نزاع قانوني</button>
+                        <button class="example-btn" data-question="خطوات تأسيس شركة">تأسيس شركة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Interface -->
+            <div id="chat-interface" class="chat-container" style="display: none;">
+                <!-- Messages Area -->
+                <div id="messages-area" class="messages-area">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+
+                <!-- Input Section -->
+                <div class="input-section">
+                    <div class="input-container">
+                        <textarea
+                            id="question-input"
+                            placeholder="اطرح سؤالك القانوني هنا..."
+                            rows="1"
+                        ></textarea>
+                        <button id="send-button" class="send-button" disabled>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22,2 15,22 11,13 2,9"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/bot.js"></script>
+    <script src="js/downloads.js"></script>
+    <script src="js/requests.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المستشار - لوحة الإدارة</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <h1>⚖️ المستشار</h1>
+        </div>
+        <div class="navbar-links">
+          <a href="index.html" class="nav-link">🤖 البوت</a>
+          <a href="templates.html" class="nav-link">📄 القوالب</a>
+          <a href="user.html" class="nav-link">👤 حسابي</a>
+          <a href="owner.html" class="nav-link active">👨‍💼 الإدارة</a>
+        </div>
+        <div class="navbar-actions">
+          <button id="lang-toggle" class="btn-icon">🌐 EN</button>
+          <button id="theme-toggle" class="btn-icon">🌙</button>
+          <button id="logout-btn" class="btn btn-danger">خروج</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <!-- Page Header -->
+        <section class="page-header">
+          <h1>👨‍💼 لوحة الإدارة</h1>
+          <p>إدارة المستخدمين والطلبات والإحصائيات</p>
+        </section>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+              <div class="stat-value" id="stat-total-users">0</div>
+              <div class="stat-label">إجمالي المستخدمين</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-content">
+              <div class="stat-value" id="stat-total-consultations">0</div>
+              <div class="stat-label">إجمالي الاستشارات</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-content">
+              <div class="stat-value" id="stat-pending-requests">0</div>
+              <div class="stat-label">الطلبات المعلقة</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+              <div class="stat-value" id="stat-total-revenue">0</div>
+              <div class="stat-label">إجمالي الإيرادات</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="admin-tabs">
+          <button class="tab-btn active" data-tab="users">👥 المستخدمون</button>
+          <button class="tab-btn" data-tab="consultations">📝 الاستشارات</button>
+          <button class="tab-btn" data-tab="credit-requests">💳 طلبات الرصيد</button>
+          <button class="tab-btn" data-tab="transactions">💱 المعاملات</button>
+        </div>
+
+        <!-- Users Tab -->
+        <div class="tab-content active" id="users-tab">
+          <div class="card">
+            <div class="table-header">
+              <h2>👥 إدارة المستخدمين</h2>
+              <input type="text" id="users-search" placeholder="🔍 ابحث عن مستخدم..." />
+            </div>
+            <table id="users-table" class="admin-table">
+              <thead>
+                <tr>
+                  <th>المعرف</th>
+                  <th>البريد الإلكتروني</th>
+                  <th>الاسم</th>
+                  <th>الدور</th>
+                  <th>الرصيد</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="empty-row"><td colspan="6" class="empty-state">جاري تحميل البيانات...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Consultations Tab -->
+        <div class="tab-content" id="consultations-tab">
+          <div class="card">
+            <div class="table-header">
+              <h2>📝 الاستشارات</h2>
+              <select id="persona-filter">
+                <option value="">الكل</option>
+                <option value="lawyer">محامي</option>
+                <option value="judge">قاضي</option>
+                <option value="legal_analyst">محلل قانوني</option>
+                <option value="quick_consultation">استشارة سريعة</option>
+                <option value="smart_mediator">وسيط ذكي</option>
+                <option value="law_doctor">دكتور قانون</option>
+              </select>
+            </div>
+            <table id="consultations-table" class="admin-table">
+              <thead>
+                <tr>
+                  <th>المستخدم</th>
+                  <th>الشخصية</th>
+                  <th>السؤال</th>
+                  <th>التاريخ</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="empty-row"><td colspan="5" class="empty-state">جاري تحميل البيانات...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Credit Requests Tab -->
+        <div class="tab-content" id="credit-requests-tab">
+          <div class="card">
+            <div class="table-header">
+              <h2>💳 طلبات الرصيد</h2>
+              <select id="request-status-filter">
+                <option value="">الكل</option>
+                <option value="pending">معلق</option>
+                <option value="approved">موافق عليه</option>
+                <option value="rejected">مرفوض</option>
+              </select>
+            </div>
+            <table id="requests-table" class="admin-table">
+              <thead>
+                <tr>
+                  <th>المستخدم</th>
+                  <th>المبلغ</th>
+                  <th>الحالة</th>
+                  <th>التاريخ</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="empty-row"><td colspan="5" class="empty-state">جاري تحميل البيانات...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Transactions Tab -->
+        <div class="tab-content" id="transactions-tab">
+          <div class="card">
+            <div class="table-header">
+              <h2>💱 سجل المعاملات</h2>
+              <select id="transaction-type-filter">
+                <option value="">الكل</option>
+                <option value="add">إضافة</option>
+                <option value="deduct">خصم</option>
+                <option value="transfer">تحويل</option>
+              </select>
+            </div>
+            <table id="transactions-table" class="admin-table">
+              <thead>
+                <tr>
+                  <th>المستخدم</th>
+                  <th>النوع</th>
+                  <th>المبلغ</th>
+                  <th>السبب</th>
+                  <th>التاريخ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="empty-row"><td colspan="5" class="empty-state">جاري تحميل البيانات...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <!-- Add Credits Modal -->
+  <div id="add-credits-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>➕ إضافة رصيد</h2>
+        <button class="btn-close" onclick="closeModal('add-credits-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="credits-user-id" placeholder="معرف المستخدم" readonly />
+        <input type="number" id="credits-amount" placeholder="المبلغ" min="1" />
+        <textarea id="credits-reason" placeholder="السبب" rows="2"></textarea>
+        <button class="btn btn-primary" onclick="addCreditsSubmit()">إضافة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approve Request Modal -->
+  <div id="approve-request-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>✅ الموافقة على طلب</h2>
+        <button class="btn-close" onclick="closeModal('approve-request-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="approve-request-info"></p>
+        <input type="number" id="approval-amount" placeholder="المبلغ" readonly />
+        <textarea id="approval-reason" placeholder="ملاحظات الموافقة" rows="2"></textarea>
+        <div class="modal-actions">
+          <button class="btn btn-success" onclick="approveRequest()">✅ موافقة</button>
+          <button class="btn btn-danger" onclick="rejectRequest()">❌ رفض</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loading-indicator" class="loading-indicator" style="display:none;">
+    <div class="spinner"></div>
+    <p>جاري التحميل...</p>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="lang.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/owner.js"></script>
+</body>
+</html>
