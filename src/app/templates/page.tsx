@@ -177,10 +177,8 @@ export default function TemplatesPage() {
               <Card key={t.id} className="glass-card border-none rounded-[2rem] group hover:border-primary/40 transition-all flex flex-col">
                 <CardHeader>
                   <div className="flex justify-between items-start mb-4">
-                    <Badge className="bg-emerald-500/10 text-emerald-500 border-none text-[10px] px-3 font-black">
-                      {TEMPLATE_PRICE} EGP
-                    </Badge>
                     <Badge className="bg-primary/20 text-primary border-none text-[10px] px-3">{t.category}</Badge>
+                    <FileType className="h-6 w-6 opacity-20 group-hover:opacity-100 transition-all text-primary" />
                   </div>
                   <CardTitle className="text-xl font-bold">{t.title}</CardTitle>
                   <CardDescription className="text-right leading-relaxed mt-2 opacity-60">{t.description}</CardDescription>
@@ -195,7 +193,7 @@ export default function TemplatesPage() {
                       <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
                       <>
-                        <Download className="h-5 w-5" /> تخصيص وإصدار
+                        <Download className="h-5 w-5" /> تخصيص وإصدار (25 EGP)
                       </>
                     )}
                   </Button>

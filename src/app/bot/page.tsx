@@ -12,19 +12,19 @@ import {
   Trash2,
   Loader2,
   Plus,
-  History,
   Sparkles,
   Wallet,
   Scale,
   MessageSquare,
-  Image as ImageIcon,
   Camera,
   Mic,
   XCircle,
   Clock,
   Menu,
+  Paperclip,
   ChevronLeft,
-  Paperclip
+  Settings2,
+  History
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { processLegalQuery } from "@/ai/flows/legal-chat-flow";
@@ -45,7 +45,7 @@ import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const CHARACTERS = [
-  { id: "ai-standard", name: "مستشارك الذكي", icon: "🤖", cost: 1, desc: "إجابات سريعة وذكية لكافة التساؤلات" },
+  { id: "ai-standard", name: "المستشار الذكي", icon: "🤖", cost: 1, desc: "إجابات سريعة وذكية لكافة التساؤلات" },
   { id: "lawyer", name: "المحامي الفائق", icon: "⚖️", cost: 5, desc: "خبير القضايا والنزاعات المعقدة" },
   { id: "notary", name: "الكاتب العدل", icon: "✒️", cost: 1, desc: "صحة وتوثيق المستندات" },
   { id: "judge", name: "خبير القضاء", icon: "👨‍⚖️", cost: 5, desc: "رؤية ثاقبة من منصة الحكم" },
@@ -187,15 +187,14 @@ export default function BotPage() {
     setIsRecording(!isRecording);
     if (!isRecording) {
       toast({ title: "جاري الاستماع", description: "تحدث الآن ليتم تحويل صوتك لنص..." });
-      // Logic for Web Speech API can be added here
-      setTimeout(() => setIsRecording(false), 3000); // Dummy timeout
+      setTimeout(() => setIsRecording(false), 3000); 
     }
   };
 
   return (
     <div className="flex h-[calc(100vh-5rem)] w-full overflow-hidden bg-background" dir="rtl">
       
-      {/* ChatGPT Style Sidebar */}
+      {/* ChatGPT/Replit Style Sidebar */}
       <aside className={`transition-all duration-500 ease-in-out border-l border-white/5 bg-slate-950/40 backdrop-blur-3xl flex flex-col ${isSidebarOpen ? 'w-80' : 'w-0 opacity-0 overflow-hidden'}`}>
         <div className="p-4 flex flex-col gap-4">
           <Button onClick={startNewSession} className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 gap-3 font-bold text-sm">
@@ -213,7 +212,7 @@ export default function BotPage() {
                     className={`w-full text-right p-3 rounded-2xl text-xs transition-all truncate flex items-center justify-between group cursor-pointer ${sessionId === sess.id ? 'bg-white/5 text-primary border border-white/5 shadow-lg' : 'text-white/40 hover:bg-white/[0.02]'}`}
                   >
                     <div className="flex items-center gap-3 truncate">
-                      <MessageSquare className={`h-3.5 w-3.5 ${sessionId === sess.id ? 'text-primary' : 'text-white/20'}`} />
+                      <History className={`h-3.5 w-3.5 ${sessionId === sess.id ? 'text-primary' : 'text-white/20'}`} />
                       <span className="truncate">{sess.title}</span>
                     </div>
                     <button onClick={(e) => deleteSession(sess.id, e)} className="opacity-0 group-hover:opacity-100 hover:text-red-500 transition-all p-1">
@@ -321,7 +320,7 @@ export default function BotPage() {
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 />
                 
-                {/* Comfort Features Buttons */}
+                {/* Advanced Input Tools */}
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
                    <Button variant="ghost" size="icon" onClick={handleVoiceTyping} className={`h-10 w-10 rounded-full transition-all ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'text-white/20 hover:text-primary hover:bg-white/5'}`}>
                       <Mic className="h-5 w-5" />
