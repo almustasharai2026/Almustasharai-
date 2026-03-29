@@ -102,7 +102,7 @@ export function ChargeDialog({ open, onOpenChange, userName, userPhone, currentB
 
   const openWhatsApp = () => {
     const text = encodeURIComponent(
-      `🔔 طلب شحن رصيد - المحامي الذكي\n` +
+      `🔔 طلب شحن رصيد - المستشار AI\n` +
       `━━━━━━━━━━━━━━━━━━\n` +
       `👤 الاسم: ${userName}\n` +
       `📱 الهاتف: ${userPhone}\n` +
