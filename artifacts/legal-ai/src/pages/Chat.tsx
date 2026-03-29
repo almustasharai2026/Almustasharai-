@@ -6,10 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Scale, LogOut, LayoutDashboard, Send, Paperclip, Camera as CameraIcon,
-  Mic, FileText, Loader2, ChevronRight, Coins, Sparkles, Menu, X
+  Mic, FileText, Loader2, ChevronRight, Coins, Sparkles, Menu, X, Plus
 } from "lucide-react";
 import { CameraCapture } from "@/components/CameraCapture";
 import { LegalFormsDialog } from "@/components/LegalFormsDialog";
+import { ChargeDialog } from "@/components/ChargeDialog";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -172,6 +173,7 @@ export default function Chat() {
   const [cameraOpen, setCameraOpen] = useState(false);
   const [formsOpen, setFormsOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [chargeOpen, setChargeOpen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
@@ -329,26 +331,29 @@ export default function Chat() {
       {/* Bottom Actions */}
       <div className="p-3 border-t border-sidebar-border space-y-1.5">
         {/* Balance */}
-        <div className={`flex items-center justify-between px-3 py-2.5 rounded-xl border ${isBalanceZero ? "bg-destructive/10 border-destructive/30" : "bg-primary/5 border-primary/20"}`}>
+        <button
+          onClick={() => setChargeOpen(true)}
+          className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl border transition-all hover:scale-[1.02] ${isBalanceZero ? "bg-destructive/10 border-destructive/30 hover:bg-destructive/15" : "bg-primary/5 border-primary/20 hover:bg-primary/10"}`}
+        >
           <div className="flex items-center gap-2">
             <Coins className={`w-4 h-4 ${isBalanceZero ? "text-destructive" : "text-primary"}`} />
-            <span className="text-xs text-muted-foreground">الرصيد</span>
+            <span className="text-xs text-muted-foreground">رصيدي</span>
           </div>
-          <span className={`font-mono font-bold text-base ${isBalanceZero ? "text-destructive" : "text-primary"}`}>
-            {user.balance}
-          </span>
-        </div>
+          <div className="flex items-center gap-2">
+            <span className={`font-mono font-bold text-base ${isBalanceZero ? "text-destructive" : "text-primary"}`}>
+              {user.balance}
+            </span>
+            <Plus className={`w-3.5 h-3.5 ${isBalanceZero ? "text-destructive" : "text-primary"}`} />
+          </div>
+        </button>
 
         {isBalanceZero && (
           <Button
             size="sm"
             className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold gap-2 rounded-xl"
-            onClick={() => {
-              const t = encodeURIComponent(`طلب شحن رصيد:\nالمستخدم: ${user.name}\nالهاتف: ${user.phone}\nالمبلغ: `);
-              window.open(`https://wa.me/+201000000000?text=${t}`, "_blank");
-            }}
+            onClick={() => setChargeOpen(true)}
           >
-            💬 شحن الرصيد عبر واتساب
+            💬 شحن الرصيد الآن
           </Button>
         )}
 
@@ -580,10 +585,7 @@ export default function Chat() {
               <p className="text-[10px] text-muted-foreground/50">Enter للإرسال · Shift+Enter لسطر جديد</p>
               {isBalanceZero && (
                 <button
-                  onClick={() => {
-                    const t = encodeURIComponent(`طلب شحن رصيد:\nالمستخدم: ${user.name}\nالهاتف: ${user.phone}`);
-                    window.open(`https://wa.me/+201000000000?text=${t}`, "_blank");
-                  }}
+                  onClick={() => setChargeOpen(true)}
                   className="text-[10px] text-[#25D366] font-bold hover:underline"
                 >
                   💬 شحن الرصيد الآن
@@ -604,6 +606,13 @@ export default function Chat() {
         });
       }} />
       <LegalFormsDialog open={formsOpen} onOpenChange={setFormsOpen} />
+      <ChargeDialog
+        open={chargeOpen}
+        onOpenChange={setChargeOpen}
+        userName={user.name}
+        userPhone={user.phone}
+        currentBalance={user.balance}
+      />
     </div>
   );
 }
