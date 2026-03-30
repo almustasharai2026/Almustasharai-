@@ -12,7 +12,7 @@ import {
   MessageSquare,
   ChevronRight,
   Gift,
-  Scale
+  Gavel
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
