@@ -1,0 +1,79 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * ALMUSTASHAR AI - SUPREME SECURITY RULES
+     * 
+     * الهوية: السيطرة السيادية للمالك والحماية المطلقة للمستخدم.
+     * المالك: bishoysamy390@gmail.com
+     */
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.email == "bishoysamy390@gmail.com";
+    }
+
+    // --- قوانين المجموعات ---
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if isSignedIn();
+      allow update: if isAdmin() || (isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['balance', 'status', 'email']));
+      allow delete: if isAdmin();
+
+      match /chatSessions/{sessionId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+        
+        match /messages/{messageId} {
+          allow read, write: if isOwner(userId) || isAdmin();
+        }
+      }
+    }
+
+    match /specializations/{specializationId} {
+      allow get, list: if true;
+      allow write: if isAdmin();
+    }
+
+    match /consultantProfiles/{consultantId} {
+      allow get, list: if true;
+      allow write: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /consultations/{consultationId} {
+      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || resource.data.consultantId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (request.query.limit <= 50); 
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
+
+      match /chat/{messageId} {
+        allow get, list, create: if isSignedIn();
+        allow update, delete: if isAdmin();
+      }
+    }
+    
+    match /paymentRequests/{requestId} {
+      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isAdmin() || (isSignedIn() && request.query.limit <= 50); 
+      allow create: if isSignedIn();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    match /{path=**}/public_data/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

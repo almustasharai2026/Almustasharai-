@@ -1,0 +1,57 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a registered user with balance and profile info.",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "fullName": { "type": "string" },
+        "balance": { "type": "number", "description": "User wallet balance in EGP" },
+        "dateJoined": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "email", "fullName", "balance"]
+    },
+    "ChatSession": {
+      "title": "ChatSession",
+      "type": "object",
+      "description": "A saved chat session for the AI bot history.",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "characterId": { "type": "string" },
+        "lastMessageAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "title", "lastMessageAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "bot"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["password", "google.com", "facebook.com"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile with balance."
+    },
+    "/users/{userId}/chatSessions/{sessionId}": {
+      "schema": "ChatSession",
+      "description": "User chat history sessions."
+    },
+    "/users/{userId}/chatSessions/{sessionId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Messages within a session."
+    }
+  }
+}
